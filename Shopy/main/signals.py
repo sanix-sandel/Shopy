@@ -1,6 +1,6 @@
 from io import BytesIO
 import logging
-import PIL import Image
+from PIL import Image
 from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save
 from django.dispatch import receiver

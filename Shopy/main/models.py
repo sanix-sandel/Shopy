@@ -1,6 +1,11 @@
 from django.db import models
 
 # Create your models here.
+class ActiveManager(models.Manager):
+    def active(self):
+        return self.filter(active=True)
+
+
 class Product(models.Model):
     name=models.CharField(max_length=32)
     description=models.TextField(blank=True)
@@ -10,19 +15,22 @@ class Product(models.Model):
     in_stock=models.BooleanField(default=True)
     date_update=models.DateTimeField(auto_now=True)
 
+    objects=ActiveManager()
+
 
 class ProductImage(models.Model):
     product=models.ForeignKey(
         Product, on_delete=models.CASCADE
+    )
+    thumbnail=models.ImageField(
+        upload_to="product-thumbnails", null=True
     )
     image=models.ImageField(upload_to='product-images')
 
 
 class ProductTag(models.Model):
     products=models.ManyToManyField(Product, blank=True)
-    thumbnail=models.ImageField(
-        upload_to="product-thumbnails", null=True
-    )
+
     name=models.CharField(max_length=32)
     slug=models.SlugField(max_length=48)
     description=models.TextField(blank=True)
