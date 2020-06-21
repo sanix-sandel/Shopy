@@ -5,6 +5,8 @@ from django.core.files.base import ContentFile
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .models import ProductImage
+from django.contrib.auth.signals import user_logged_in
+from .models import Basket
 
 
 THUMBNAIL_SIZE=(300, 300)
