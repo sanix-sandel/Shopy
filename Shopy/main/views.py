@@ -78,6 +78,7 @@ class SignupView(FormView):
 
 class AddressListView(LoginRequiredMixin, ListView):
     model=models.Address
+    template_name='main/address_list.html'
 
     def get_queryset(self):
         return self.models.objects.filter(user=self.request.user)
@@ -93,6 +94,7 @@ class AddressCreateView(LoginRequiredMixin, CreateView):
         'city',
         'country',
     ]
+    template_name='main/address_form.html'
     success_url=reverse_lazy('address_list')
 
     def form_valid(self, form):
@@ -101,21 +103,27 @@ class AddressCreateView(LoginRequiredMixin, CreateView):
         obj.save()
         return super().form_valid(form)
 
-    def form_valid(self, form):
-        model=models.Address
-        fields=[
-            'name',
-            'address1',
-            'address2',
-            'zip_code',
-            'city',
-            'country',
-        ]
+class AddressUpdateView(LoginRequiredMixin, UpdateView):
+    model=models.Address
+    fields=[
+        'name',
+        'address1',
+        'address2',
+        'zip_code',
+        'city',
+        'country',
+    ]
+    template_name='main/address_update.html'
+    success_url=reverse_lazy('address_list')
 
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+        #Each user must be able to operate only on their own address
 
 class AddressDeleteView(LoginRequiredMixin, DeleteView):
     model=models.Address
     success_url=reverse_lazy('address_list')
+    template_name='main/address_delete.html'
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
