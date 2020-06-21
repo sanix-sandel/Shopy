@@ -36,9 +36,12 @@ class ProductImageAdmin(admin.ModelAdmin):
             )
         return "-"
     thumbnail_tag.short_description = "Thumbnail"
+
     def product_name(self, obj):
         return obj.product.name
 admin.site.register(ProductImage, ProductImageAdmin)
+
+
 
 @admin.register(models.User)
 class UserAdmin(DjangoUserAdmin):

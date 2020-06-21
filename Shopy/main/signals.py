@@ -25,7 +25,7 @@ def generate_thumbnail(sender, instance, **kwargs):
     temp_thumb.seek(0)
     instance.thumbnail.save(
         instance.image.name,
-        ContentField(temp_thumb.read()),
+        ContentFile(temp_thumb.read()),
         save=False,
     )
     temp_thumb.close()
