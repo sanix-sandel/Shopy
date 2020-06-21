@@ -3,6 +3,7 @@ from . import models
 def basket_middleware(get_response):
     def middleware(request):
         if 'basket_id' in request.session:
+            #'basket_id' is created in add_to_basket function
             basket_id=request.session['basket_id']
             basket=models.Basket.objects.get(id=basket_id)
             #instead of get, get_object_or_404 must be used
