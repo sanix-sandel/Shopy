@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Product, ProductTag, ProductImage
 from django.utils.html import format_html
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from . import models
 
 class ProductAdmin(admin.ModelAdmin):
     list_display=('name', 'slug', 'in_stock', 'price')
@@ -8,6 +10,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable=('in_stock',)
     search_fields=('name',)
     prepopulated_fields={"slug":("name",)}
+    autocompleted_fields=('tags',)
 admin.site.register(Product, ProductAdmin)
 
 
@@ -17,7 +20,7 @@ class ProductTagAdmin(admin.ModelAdmin):
     list_filter = ('active',)
     search_fields = ('name',)
     prepopulated_fields = {"slug": ("name",)}
-    autocomplete_fields = ('products',)
+
 admin.site.register(ProductTag, ProductTagAdmin)
 
 
@@ -36,3 +39,46 @@ class ProductImageAdmin(admin.ModelAdmin):
     def product_name(self, obj):
         return obj.product.name
 admin.site.register(ProductImage, ProductImageAdmin)
+
+@admin.register(models.User)
+class UserAdmin(DjangoUserAdmin):
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        (
+            "Personal info",
+            {"fields": ("first_name", "last_name")},
+        ),
+        (
+            "Permissions",
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        (
+            "Important dates",
+            {"fields": ("last_login", "date_joined")},
+        ),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
+        ),
+    )
+    list_display = (
+        "email",
+        "first_name",
+        "last_name",
+        "is_staff",
+    )
+    search_fields = ("email", "first_name", "last_name")
+    ordering = ("email",)
