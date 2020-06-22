@@ -1,6 +1,6 @@
 from django.urls import path
 from . import models, views
-from django.views.generic.detail import DetailView
+from django.views.generic import DetailView, TemplateView
 from . import forms
 from django.contrib.auth import views as auth_views
 
@@ -30,5 +30,11 @@ urlpatterns = [
 
     path('add_to_basket/', views.add_to_basket, name='add_to_basket'),
     path('basket/', views.manage_basket, name='basket'),
-      
+
+    path("order/done/", TemplateView.as_view(template_name='order_name.html'),
+        name="checkout_done"),
+
+    path("order/address_select/", views.AddressSelectionView.as_view(),
+        name="address_select"),
+
 ]
