@@ -174,3 +174,51 @@ def manage_basket(request):
     if request.basket.is_empty():
         return render(request, "main/basket.html", {"formset":None})
     return render(request, "main/basket.html", {"formset":formset})
+
+def create_order(self, billing_address, shipping_address):
+    if not self.user:
+        raise exceptions.BasketException(
+            "Cannot create order without user"
+        )
+    logger.info(
+        "Creating order for basket_id=%d"
+        ", shipping_address_id=%d, billing_address_id=%d",
+        self.id,
+        shipping_address.id,
+        billing_address.id,
+    )
+    order_data = {
+            "user":self.user,
+            "billing_name": billing_address.name,
+            "billing_address1": billing_address.address1,
+            "billing_address2": billing_address.address2,
+            "billing_zip_code": billing_address.zip_code,
+            "billing_city": billing_address.city,
+            "billing_country": billing_address.country,
+            "shipping_name": shipping_address.name,
+            "shipping_address1": shipping_address.address1,
+            "shipping_address2": shipping_address.address2,
+            "shipping_zip_code": shipping_address.zip_code,
+            "shipping_city": shipping_address.city,
+            "shipping_country": shipping_address.country,
+        }
+    order = Order.objects.create(**order_data)
+    c=0
+    for line in self.basketline_set.all():
+        for item in range(line.quantity):
+            order_line_data = {
+                    "order": order,
+                    "product": line.product,
+            }
+            order_line = OrderLine.objects.create(
+                    **order_line_data
+            )
+            c += 1
+    logger.info(
+            "Created order with id=%d and lines_count=%d",
+            order.id,
+            c,
+        )
+    self.status = Basket.SUBMITTED
+    self.save()
+    return order
