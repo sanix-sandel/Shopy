@@ -244,3 +244,10 @@ class AddressSelectionView(LoginRequiredMixin, FormView):
             form.cleaned_data['shipping_address']
         )
         return super().form_valid(form)
+
+def room(request, order_id):
+    return render(
+        request,
+        "main/chat_room.html",
+        {"room_name_json":str(order_id)},
+    )

@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'channels',
+
     'rest_framework',
     'six',
     'django_filters',
@@ -45,6 +48,18 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'main.apps.MainConfig',
 ]
+
+ASGI_APPLICATION="Shopy.routing.application"
+
+CHANNEL_LAYERS={
+    'default':{
+        'BACKEND':'channels_redis.core.RedisCHannelsLayer',
+        'CONFIG':{
+            "hosts":[('127.0.0.1', 6379)],
+        },
+    },
+}
+
 
 REST_FRAMEWORK={
     'DEFAULT_AUTHENTICATION_CLASSES':
