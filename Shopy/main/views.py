@@ -86,7 +86,7 @@ class AddressListView(LoginRequiredMixin, ListView):
     template_name='main/address_list.html'
 
     def get_queryset(self):
-        return self.models.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user)
 
 
 class AddressCreateView(LoginRequiredMixin, CreateView):
@@ -174,6 +174,8 @@ def manage_basket(request):
     if request.basket.is_empty():
         return render(request, "main/basket.html", {"formset":None})
     return render(request, "main/basket.html", {"formset":formset})
+
+
 
 def create_order(self, billing_address, shipping_address):
     if not self.user:

@@ -1,8 +1,15 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from . import models, views
 from django.views.generic import DetailView, TemplateView
 from . import forms
 from django.contrib.auth import views as auth_views
+from . import endpoints
+
+router=routers.DefaultRouter()
+router.register(r'orderlines', endpoints.PaidOrderLineViewSet)
+router.register(r'orders', endpoints.PaidOrderViewSet)
+
 
 
 urlpatterns = [
@@ -36,5 +43,8 @@ urlpatterns = [
 
     path("order/address_select/", views.AddressSelectionView.as_view(),
         name="address_select"),
+
+
+    path('api/', include(router.urls)),
 
 ]

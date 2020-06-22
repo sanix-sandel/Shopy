@@ -37,11 +37,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'six',
+    'django_filters',
 
     'django_extensions',
     'widget_tweaks',
     'main.apps.MainConfig',
 ]
+
+REST_FRAMEWORK={
+    'DEFAULT_AUTHENTICATION_CLASSES':
+    ('rest_framework.authentication.SessionAuthentication',
+     'rest_framework.authentication.BasicAuthentication'),
+
+    'DEFAULT_PERMISSION_CLASSES':
+    ('rest_framework.permissions.DjangoModelPermissions',),
+
+    'DEFAULT_FILTER_BACKENDS':#pip install djangorestframework-filters
+    ('django_filters.rest_framework.DjangoFilterBackend',),
+
+    'DEFAULT_PAGINATION_CLASS':
+    'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
